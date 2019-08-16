@@ -16,7 +16,7 @@ class CreateMasterKelurahan extends Migration
         Schema::create('m_kelurahan', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_kecamatan');
-            $table->string("nama_kecamatan");
+            $table->string("nama_kelurahan");
             $table->timestamps();
 
             // Foreign Key

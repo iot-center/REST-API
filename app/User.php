@@ -16,7 +16,27 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        "nik",
+        "nama",
+        "tempat_lahir",
+        "tgl_lahir",
+        "jenis_kelamin",
+        "gol_darah",
+        "alamat",
+        "rt",
+        "rw",
+        "id_provinsi",
+        "id_kota",
+        "id_kelurahan",
+        "id_kecamatan",
+        "id_agama",
+        "id_status_perkawinan",
+        "id_kewarga_negaraan",
+        "username",
+        "email",
+        "no_hp",
+        "password",
+        "api_token"
     ];
 
     /**
@@ -25,15 +45,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
+        'nik', 'password', 'remember_token'
     ];
 }

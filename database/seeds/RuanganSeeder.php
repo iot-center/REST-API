@@ -17,7 +17,7 @@ class RuanganSeeder extends Seeder {
             [4, "Ruang Admin Teknik"],
         ];
         
-        // Insert Daftar Gedung
+        // Insert Daftar Ruangan
         foreach ($items as $item) {
             $table->insert([
                 "id_lantai" => $item[0],

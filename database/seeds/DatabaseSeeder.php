@@ -20,7 +20,10 @@ class DatabaseSeeder extends Seeder
             // KotaSeeder::class,
             // KecamatanSeeder::class,
             // KelurahanSeeder::class
-            UsersSeeder::class
+            // UsersSeeder::class
+            GedungSeeder::class,
+            LantaiSeeder::class,
+            RuanganSeeder::class
         ]);
     }
 }

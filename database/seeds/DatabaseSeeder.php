@@ -11,6 +11,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call([
+            // AgamaSeeder::class,
+            // KewargaNegaraanSeeder::class,
+            // StatusPerkawinanSeeder::class,
+            // LevelUsersSeeder::class,
+            // ProvinsiSeeder::class,
+            // KotaSeeder::class,
+            // KecamatanSeeder::class,
+            // KelurahanSeeder::class
+            UsersSeeder::class
+        ]);
     }
 }

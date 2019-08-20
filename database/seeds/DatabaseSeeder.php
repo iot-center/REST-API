@@ -24,8 +24,10 @@ class DatabaseSeeder extends Seeder
             // GedungSeeder::class,
             // LantaiSeeder::class,
             // RuanganSeeder::class
-            MasterHakAksesGuestSeeder::class,
-            HakAksesGuestSeeder::class
+            // MasterHakAksesGuestSeeder::class,
+            // HakAksesGuestSeeder::class
+            // DeviceSeeder::class,
+            DataDeviceSeeder::class,
         ]);
     }
 }

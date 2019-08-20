@@ -36,6 +36,7 @@ class User extends Authenticatable
         "email",
         "no_hp",
         "password",
+        "id_level",
         "api_token"
     ];
 

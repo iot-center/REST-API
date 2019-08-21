@@ -15,7 +15,8 @@ class LevelUsersSeeder extends Seeder
         $items = [
             "Superadmin",
             "Useradmin",
-            "Guest"
+            "Guest",
+            "Not Active"
         ];
 
         // Insert Daftar Level User

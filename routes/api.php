@@ -8,6 +8,7 @@ Route::get('/user/all', 'API_User@getAll')->middleware('auth:api');
 Route::get('/user/detail/{user_id}', 'API_User@getDetail')->middleware('auth:api');
 Route::get('/user/deactive/{user_id}', 'API_User@deactive')->middleware('auth:api');
 
+
 Route::put('/user/edit/{user_id}', 'API_User@update')->middleware('auth:api');
 Route::put('/user/profile/edit', 'API_User@updateProfile')->middleware('auth:api');
 

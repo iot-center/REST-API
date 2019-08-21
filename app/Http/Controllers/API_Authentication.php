@@ -41,6 +41,12 @@ class API_Authentication extends Controller {
 
     // Sign Up Authentication
     public function signUp(Request $request, User $user) {
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+        
         $this->validate($request, [
             "nik"               => "required|unique:users|min:16|numeric",
             "nama"              => "required",

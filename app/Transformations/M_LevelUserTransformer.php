@@ -8,6 +8,7 @@ use App\M_LevelUser;
 class M_LevelUserTransformer extends TransformerAbstract{
     public function transform(M_LevelUser $level) {
         return [
+            "id_level"  => $level->id,
             "level"       => $level->level
         ];
     }

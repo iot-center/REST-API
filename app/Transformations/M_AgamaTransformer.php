@@ -9,7 +9,7 @@ class M_AgamaTransformer extends TransformerAbstract{
     public function transform(M_Agama $agama) {
         return [
             "id_agama"           => $agama->id,
-            "kecamatan"         => $agama->agama
+            "agama"         => $agama->agama
         ];
     }
 }

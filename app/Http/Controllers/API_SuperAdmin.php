@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Transformations\M_AgamaTransformer;
 use App\Transformations\M_LevelUserTransformer;
 use App\Transformations\M_ProvinsiTransformer;
 use App\Transformations\M_KotaTransformer;
@@ -10,6 +11,7 @@ use App\Transformations\M_KelurahanTransformer;
 use App\Transformations\M_KewargaNegaraanTransformer;
 use App\Transformations\M_StatusPerkawinanTransformer;
 use Illuminate\Http\Request;
+use App\M_Agama;
 use App\M_LevelUser;
 use App\M_Provinsi;
 use App\M_Kota;
@@ -21,6 +23,92 @@ use Auth;
 use Hash;
 
 class API_SuperAdmin extends Controller {
+
+    // Create Agama
+    public function createAgama(Request $request, M_Agama $agama) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "agama"      => 'required',
+        ]);
+
+        $data = $agama->create([
+            "agama" => $request->agama
+        ]);
+
+        return response()->json(fractal()
+            ->item($data)
+            ->transformWith(new M_AgamaTransformer)
+            ->toArray(), 200);
+    }
+    // Update Agama
+    public function updateAgama(Request $request, M_Agama $agama) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_agama"   => 'required',
+            "agama"      => 'required',
+        ]);
+
+        $status = $agama->where([
+            ["id", "=", $request->id_agama]
+        ])->update([
+            "agama"     => $request->agama
+        ]);
+
+        if ($status) {
+            $data = $agama->where([
+                ["id", "=", $request->id_agama]
+            ])->get();
+        } else {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_AgamaTransformer)
+            ->toArray(), 200);
+    }
+    // Delete Agama
+    public function deleteAgama(Request $request, M_Agama $agama) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $data = $agama->where([
+            ["id", "=", $request->id_agama]
+        ])->get();
+
+        $status = $agama->where([
+            ["id", "=", $request->id_agama]
+        ])->delete();
+
+        if (!$status) {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_AgamaTransformer)
+            ->toArray(), 200);
+    }
 
     // Create Level User
     public function createLevelUser(Request $request, M_LevelUser $level) {
@@ -54,11 +142,11 @@ class API_SuperAdmin extends Controller {
         }
 
         $data = $level->where([
-            ["id_level", "=", $request->id_level]
+            ["id", "=", $request->id_level]
         ])->get();
 
-        $status = $kategori->where([
-            ["id_level", "=", $request->id_level]
+        $status = $level->where([
+            ["id", "=", $request->id_level]
         ])->delete();
 
         if (!$status) {
@@ -86,15 +174,15 @@ class API_SuperAdmin extends Controller {
             "level"      => 'required',
         ]);
 
-        $status = $kategori->where([
-            ["id_level", "=", $request->id_level]
+        $status = $level->where([
+            ["id", "=", $request->id_level]
         ])->update([
             "level"     => $request->level
         ]);
 
         if ($status) {
             $data = $level->where([
-                ["id_level", "=", $request->id_level]
+                ["id", "=", $request->id_level]
             ])->get();
         } else {
             return response()->json([

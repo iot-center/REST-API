@@ -21,3 +21,4 @@ Route::delete('/admin/super/level-user/delete/{id_level}', 'API_SuperAdmin@delet
 Route::post('/auth/signin', 'API_Authentication@signIn');
 Route::post('/auth/signup', 'API_Authentication@signUp')->middleware('auth:api');
 Route::post('/admin/super/level-user/create', 'API_SuperAdmin@createLevelUser')->middleware('auth:api');
+Route::post('/admin/user/guest/create', 'API_AdminUser@createUserGuest')->middleware('auth:api');

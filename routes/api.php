@@ -35,6 +35,22 @@ Route::get('/admin/umum/kecamatan/id/{id_kecamatan}', 'API_Umum@getKecamatanByID
 Route::get('/admin/umum/kelurahan/all', 'API_Umum@getKelurahanAll')->middleware('auth:api');
 Route::get('/admin/umum/kelurahan/kecamatan/id/{id_kecamatan}', 'API_Umum@getKelurahanByKecamatanID')->middleware('auth:api');
 Route::get('/admin/umum/kelurahan/id/{id_kelurahan}', 'API_Umum@getKelurahanByID')->middleware('auth:api');
+Route::get('/admin/umum/master-hak-akses/all', 'API_Umum@getMasterHakAksesUserAll')->middleware('auth:api');
+Route::get('/admin/umum/master-hak-akses/id/{id_hak_akses}', 'API_Umum@getMasterHakAksesUserByID')->middleware('auth:api');
+Route::get('/admin/umum/master-hak-akses/gedung/id/{id_gedung}', 'API_Umum@getMasterHakAksesUserByGedungID')->middleware('auth:api');
+Route::get('/admin/umum/master-hak-akses/lantai/id/{id_lantai}', 'API_Umum@getMasterHakAksesUserByLantaiID')->middleware('auth:api');
+Route::get('/admin/umum/master-hak-akses/ruangan/id/{id_ruangan}', 'API_Umum@getMasterHakAksesUserByRuanganID')->middleware('auth:api');
+Route::get('/admin/umum/hak-akses/all', 'API_Umum@getHakAksesUserAll')->middleware('auth:api');
+Route::get('/admin/umum/hak-akses/id/{id_user}', 'API_Umum@getHakAksesUserByID')->middleware('auth:api');
+Route::get('/admin/umum/device/all', 'API_Umum@getDeviceAll')->middleware('auth:api');
+Route::get('/admin/umum/device/gedung/id/{id_gedung}', 'API_Umum@getDeviceByGedungID')->middleware('auth:api');
+Route::get('/admin/umum/device/lantai/id/{id_lantai}', 'API_Umum@getDeviceByLantaiID')->middleware('auth:api');
+Route::get('/admin/umum/device/ruangan/id/{id_ruangan}', 'API_Umum@getDeviceByRuanganID')->middleware('auth:api');
+Route::get('/admin/umum/data-device/all', 'API_Umum@getDataDeviceAll')->middleware('auth:api');
+Route::get('/admin/umum/data-device/device/id/{id_device}', 'API_Umum@getDataDeviceByDeviceID')->middleware('auth:api');
+Route::get('/admin/umum/data-device/gedung/id/{id_gedung}', 'API_Umum@getDataDeviceByGedungID')->middleware('auth:api');
+Route::get('/admin/umum/data-device/lantai/id/{id_lantai}', 'API_Umum@getDataDeviceByLantaiID')->middleware('auth:api');
+Route::get('/admin/umum/data-device/ruangan/id/{id_ruangan}', 'API_Umum@getDataDeviceByRuanganID')->middleware('auth:api');
 
 Route::put('/user/edit/{id_user}', 'API_User@update')->middleware('auth:api');
 Route::put('/user/profile/edit', 'API_User@updateProfile')->middleware('auth:api');

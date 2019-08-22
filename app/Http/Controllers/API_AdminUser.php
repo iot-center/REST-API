@@ -8,6 +8,10 @@ use App\User;
 
 class API_AdminUser extends Controller {
     
+    // Create Hak Akses User
+    // Update Hak Akses User
+    // Delete Hak Akses User
+    
     // Create User Guest
     public function createUserGuest(Request $request, User $user) {
         if (!isset(Auth::user()->id)) {

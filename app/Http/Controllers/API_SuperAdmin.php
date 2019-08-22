@@ -10,6 +10,12 @@ use App\Transformations\M_KecamatanTransformer;
 use App\Transformations\M_KelurahanTransformer;
 use App\Transformations\M_KewargaNegaraanTransformer;
 use App\Transformations\M_StatusPerkawinanTransformer;
+use App\Transformations\M_GedungTransformer;
+use App\Transformations\M_LantaiTransformer;
+use App\Transformations\M_RuanganTransformer;
+use App\Transformations\M_HakAksesGuestTransformer;
+use App\Transformations\M_DeviceTransformer;
+use App\Transformations\DataDeviceTransformer;
 use Illuminate\Http\Request;
 use App\M_Agama;
 use App\M_LevelUser;
@@ -19,10 +25,579 @@ use App\M_Kecamatan;
 use App\M_Kelurahan;
 use App\M_KewargaNegaraan;
 use App\M_StatusPerkawinan;
+use App\M_Gedung;
+use App\M_Lantai;
+use App\M_Ruangan;
+use App\M_HakAksesGuest;
+use App\M_Device;
+use App\DataDevice;
 use Auth;
 use Hash;
 
 class API_SuperAdmin extends Controller {
+
+    // Create Ruangan
+    public function createRuangan(Request $request, M_Ruangan $ruangan) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_lantai"      => 'required',
+            "nama_ruangan"     => 'required'
+        ]);
+
+        $data = $ruangan->create([
+            "id_lantai" => $request->id_lantai,
+            "nama_ruangan" => $request->nama_ruangan,
+        ]);
+
+        return response()->json(fractal()
+            ->item($data)
+            ->transformWith(new M_Ruangan)
+            ->toArray(), 200);
+
+    }
+    // Update Ruangan
+    public function updateRuangan(Request $request, M_Ruangan $ruangan) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_ruangan"   => 'required',
+            "id_lantai"      => 'required',
+            "nama_ruangan"     => 'required'
+        ]);
+
+        $status = $ruangan->where([
+            ["id", "=", $request->id_ruangan]
+        ])->update([
+            "id_lantai"     => $request->id_lantai,
+            "nama_ruangan"  => $request->nama_ruangan
+        ]);
+
+        if ($status) {
+            $data = $ruangan->where([
+                ["id", "=", $request->id_ruangan]
+            ])->get();
+        } else {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Ruangan)
+            ->toArray(), 200);
+        
+    }
+    // Delete Ruangan
+    public function deleteRuangan(Request $request, M_Ruangan $ruangan) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $data = $ruangan->where([
+            ["id", "=", $request->id_ruangan]
+        ])->get();
+
+        $status = $ruangan->where([
+            ["id", "=", $request->id_ruangan]
+        ])->delete();
+
+        if (!$status) {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Ruangan)
+            ->toArray(), 200);
+        
+    }
+
+    // Create Lantai
+    public function createLantai(Request $request, M_Lantai $lantai) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_gedung"      => 'required',
+            "nama_lantai"     => 'required'
+        ]);
+
+        $data = $lantai->create([
+            "id_gedung" => $request->id_gedung,
+            "nama_lantai" => $request->nama_lantai,
+        ]);
+
+        return response()->json(fractal()
+            ->item($data)
+            ->transformWith(new M_Lantai)
+            ->toArray(), 200);
+        
+    }
+    // Update Lantai
+    public function updateLantai(Request $request, M_Lantai $lantai) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_lantai"   => 'required',
+            "id_gedung"      => 'required',
+            "nama_lantai"     => 'required',
+        ]);
+
+        $status = $lantai->where([
+            ["id", "=", $request->id_lantai]
+        ])->update([
+            "id_gedung"     => $request->id_gedung,
+            "nama_lantai"     => $request->id_lantai,
+        ]);
+
+        if ($status) {
+            $data = $lantai->where([
+                ["id", "=", $request->id_lantai]
+            ])->get();
+        } else {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Lantai)
+            ->toArray(), 200);
+        
+    }
+    // Delete Lantai
+    public function deleteLantai(Request $request, M_Lantai $lantai) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $data = $lantai->where([
+            ["id", "=", $request->id_lantai]
+        ])->get();
+
+        $status = $lantai->where([
+            ["id", "=", $request->id_lantai]
+        ])->delete();
+
+        if (!$status) {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Lantai)
+            ->toArray(), 200);
+        
+    }
+
+    // Create Gedung
+    public function createGedung(Request $request, M_Gedung $gedung) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "nama_gedung"      => 'required',
+            "singkatan_gedung"     => 'required'
+        ]);
+
+        $data = $gedung->create([
+            "nama_gedung" => $request->nama_gedung,
+            "singkatan_gedung" => $request->singkatan_gedung,
+        ]);
+
+        return response()->json(fractal()
+            ->item($data)
+            ->transformWith(new M_Gedung)
+            ->toArray(), 200);
+        
+    }
+    // Update Gedung
+    public function updateGedung(Request $request, M_Gedung $gedung) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_gedung"   => 'required',
+            "nama_gedung"      => 'required',
+            "singkatan_gedung"     => 'required'
+        ]);
+
+        $status = $gedung->where([
+            ["id", "=", $request->id_gedung]
+        ])->update([
+            "nama_gedung"     => $request->nama_gedung,
+            "singkatan_gedung"    => $request->singkatan_gedung
+        ]);
+
+        if ($status) {
+            $data = $gedung->where([
+                ["id", "=", $request->id_gedung]
+            ])->get();
+        } else {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Gedung)
+            ->toArray(), 200);
+        
+    }
+    // Delete Gedung
+    public function deleteGedung(Request $request, M_Gedung $gedung) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $data = $gedung->where([
+            ["id", "=", $request->id_gedung]
+        ])->get();
+
+        $status = $gedung->where([
+            ["id", "=", $request->id_gedung]
+        ])->delete();
+
+        if (!$status) {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Gedung)
+            ->toArray(), 200);
+        
+    }
+
+    // Create Data Device
+    public function createDataDevice(Request $request, DataDevice $data_device) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_device"      => 'required',
+            "Va"    => 'required',
+            "Vb"    => 'required',
+            "Vc"    => 'required',
+            "Vab"   => 'required',
+            "Vbc"   => 'required',
+            "Vca"   => 'required',
+            "Ia"    => 'required',
+            "Ib"    => 'required',
+            "Ic"    => 'required',
+            "Pa"    => 'required',
+            "Pb"    => 'required',
+            "Pc"    => 'required',
+            "Qa"    => 'required',
+            "Qb"    => 'required',
+            "Qc"    => 'required',
+            "Sa"    => 'required',
+            "Sb"    => 'required',
+            "Sc"    => 'required',
+            "PFa"    => 'required',
+            "PFb"    => 'required',
+            "PFc"    => 'required',
+            "Freq"    => 'required',
+            "TAE"    => 'required'
+        ]);
+
+        $data = $data_device->create([
+            "id_device"      => $request->id_device,
+            "Va"    => $request->Va,
+            "Vb"    => $request->Vb,
+            "Vc"    => $request->Vc,
+            "Vab"   => $request->Vab,
+            "Vbc"   => $request->Vbc,
+            "Vca"   => $request->Vca,
+            "Ia"    => $request->Ia,
+            "Ib"    => $request->Ib,
+            "Ic"    => $request->Ic,
+            "Pa"    => $request->Pa,
+            "Pb"    => $request->Pb,
+            "Pc"    => $request->Pc,
+            "Qa"    => $request->Qa,
+            "Qb"    => $request->Qb,
+            "Qc"    => $request->Qc,
+            "Sa"    => $request->Sa,
+            "Sb"    => $request->Sb,
+            "Sc"    => $request->Sc,
+            "PFa"    => $request->PFa,
+            "PFb"    => $request->PFb,
+            "PFc"    => $request->PFc,
+            "Freq"    => $request->Freq,
+            "TAE"    => $request->TAE
+        ]);
+
+        return response()->json(fractal()
+            ->item($data)
+            ->transformWith(new DataDeviceTransformer)
+            ->toArray(), 200);
+        
+    }
+    // Update Data Device
+    public function updateDataDevice(Request $request, DataDevice $data_device) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+        
+    }
+    // Delete Data Device
+    public function deleteDataDevice(Request $request, DataDevice $data_device) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+        
+    }
+
+    // Create Device
+    public function createDevice(Request $request, M_Device $device) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_gedung"      => 'required',
+            "id_lantai"     => 'required',
+            "id_ruangan"    => 'required'
+        ]);
+
+        $data = $device->create([
+            "id_gedung" => $request->id_gedung,
+            "id_lantai" => $request->id_lantai,
+            "id_ruangan"    => $request->id_ruangan
+        ]);
+
+        return response()->json(fractal()
+            ->item($data)
+            ->transformWith(new M_Device)
+            ->toArray(), 200);
+        
+    }
+    // Update Device
+    public function updateDevice(Request $request, M_Device $device) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_device"   => 'required',
+            "id_gedung"      => 'required',
+            "id_lantai"     => 'required',
+            "id_ruangan"    => 'required'
+        ]);
+
+        $status = $device->where([
+            ["id", "=", $request->id_device]
+        ])->update([
+            "id_gedung"     => $request->id_gedung,
+            "id_lantai"     => $request->id_lantai,
+            "id_ruangan"    => $request->id_ruangan
+        ]);
+
+        if ($status) {
+            $data = $device->where([
+                ["id", "=", $request->id_device]
+            ])->get();
+        } else {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Device)
+            ->toArray(), 200);
+        
+    }
+    // Delete Device
+    public function deleteDevice(Request $request, M_Device $device) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $data = $device->where([
+            ["id", "=", $request->id_device]
+        ])->get();
+
+        $status = $device->where([
+            ["id", "=", $request->id_device]
+        ])->delete();
+
+        if (!$status) {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_Device)
+            ->toArray(), 200);
+        
+    }
+
+    // Create Master Hak Akses User
+    public function createMasterHakAkses(Request $request, M_HakAksesGuest $hak_akses) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_gedung"      => 'required',
+            "id_lantai"     => 'required',
+            "id_ruangan"    => 'required'
+        ]);
+
+        $data = $hak_akses->create([
+            "id_gedung" => $request->id_gedung,
+            "id_lantai" => $request->id_lantai,
+            "id_ruangan"    => $request->id_ruangan
+        ]);
+
+        return response()->json(fractal()
+            ->item($data)
+            ->transformWith(new M_HakAksesGuestTransformer)
+            ->toArray(), 200);
+        
+    }
+    // Update Master Hak Akses User
+    public function updateMasterHakAkses(Request $request, M_HakAksesGuest $hak_akses) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $this->validate($request, [
+            "id_hak_akses"   => 'required',
+            "id_gedung"      => 'required',
+            "id_lantai"     => 'required',
+            "id_ruangan"    => 'required'
+        ]);
+
+        $status = $hak_akses->where([
+            ["id", "=", $request->id_hak_akses]
+        ])->update([
+            "id_gedung"     => $request->id_gedung,
+            "id_lantai"     => $request->id_lantai,
+            "id_ruangan"    => $request->id_ruangan
+        ]);
+
+        if ($status) {
+            $data = $hak_akses->where([
+                ["id", "=", $request->id_hak_akses]
+            ])->get();
+        } else {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_HakAksesGuestTransformer)
+            ->toArray(), 200);
+        
+    }
+    // Delete Master Hak Akses User
+    public function deleteMasterHakAkses(Request $request, M_HakAksesGuest $hak_akses) {
+        // This is check the authentication is already or not
+        if (!isset(Auth::user()->id)) {
+            return response()->json([
+                "error" => "Invalid Credential"
+            ], 401);
+        }
+
+        $data = $hak_akses->where([
+            ["id", "=", $request->id_hak_akses]
+        ])->get();
+
+        $status = $hak_akses->where([
+            ["id", "=", $request->id_hak_akses]
+        ])->delete();
+
+        if (!$status) {
+            return response()->json([
+                "error" => "Something Went Wrong"
+            ], 401);
+        }
+
+        return response()->json(fractal()
+            ->collection($data)
+            ->transformWith(new M_HakAksesGuestTransformer)
+            ->toArray(), 200);
+        
+    }
 
     // Create Agama
     public function createAgama(Request $request, M_Agama $agama) {
